@@ -55,7 +55,7 @@ class _ForgotPasswordVerificationPageState extends State<ForgotPasswordVerificat
                             ),
                             SizedBox(height: 10,),
                             Text(
-                              'Enter the verification code we just sent you on your email address.',
+                              'Enter the verification code we just sent you on your email address',
                               style: TextStyle(
                                 // fontSize: 20,
                                   fontWeight: FontWeight.bold,
