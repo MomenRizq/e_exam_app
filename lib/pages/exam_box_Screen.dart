@@ -8,6 +8,6 @@ class Exams extends StatefulWidget {
 class _ExamsState extends State<Exams> {
   @override
   Widget build(BuildContext context) {
-    return Text("hello");
+    return Text("hi");
   }
 }
