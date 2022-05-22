@@ -1,12 +1,40 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 
-class cardExams extends StatelessWidget {
-  final String idExam ;
-  final String nameOfExam;
-  final int timer ;
-  final int Score;
 
-  const cardExams({required this.idExam, required this.nameOfExam,required this.timer, required this.Score});
+class cardExams extends StatefulWidget {
+  final List <String> idExam ;
+  final List <String>nameOfExam;
+  final List<int> timer ;
+  final List<int> Score;
+  final String token;
+
+  cardExams({required this.idExam, required this.nameOfExam,required this.timer, required this.Score, required this.token});
+
+  @override
+  State<cardExams> createState() => _cardExamsState();
+}
+
+class _cardExamsState extends State<cardExams> {
+  bool _isLoading = false;
+
+  final List<Map<String, Object>> _questions = [
+  {
+  'questionText': 'What\'s your favourite color?',
+  'answers': [
+  {'text': 'Black', 'score': 1},
+  {'text': 'Green', 'score': 0},
+  {'text': 'Blue', 'score': 0},
+  {'text': 'Yellow', 'score': 0},
+  ]
+},];
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +65,7 @@ class cardExams extends StatelessWidget {
               mainAxisSpacing: 15,
             ),
             children: [
+              for (int i = 0; i < widget.idExam.length; i++)
               InkWell(
                 child: Container(
                   padding: EdgeInsets.all(25),
@@ -55,7 +84,7 @@ class cardExams extends StatelessWidget {
                     title: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Text(
-                        nameOfExam,
+                        widget.nameOfExam[i],
                         style: TextStyle(
                             fontSize: 23,
                             fontWeight: FontWeight.bold,
@@ -67,12 +96,14 @@ class cardExams extends StatelessWidget {
                     subtitle: Padding(
                       padding: const EdgeInsets.only(left:2),
                       child: Text(
-                        "Time : ${timer}  Score:${Score}",
+                        "Time : ${widget.timer[i]}  Score:${widget.Score[i]}",
                         style: TextStyle(fontSize: 12, color: Colors.white ,),
                       ),
                     ),
                     trailing: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Quize_api(widget.idExam[i], widget.token);
+                      },
                       icon: Icon(Icons.play_arrow , size: 50,color: Colors.white,),
                     ),
                   ),
@@ -80,5 +111,33 @@ class cardExams extends StatelessWidget {
 
               ),
             ]));
+  }
+
+  Quize_api(String id, String token) async {
+    var jsonData = null;
+
+    Map<String, String> queryParams = {
+      'subject': id,
+    };
+    Map<String, String> header = {
+      HttpHeaders.authorizationHeader: "Bearer $token",
+      HttpHeaders.contentTypeHeader: "application/json"
+    };
+    String url = "https://app-e-exam.herokuapp.com/getSpacificQuestion";
+    var uri = Uri(
+        scheme: 'https',
+        host: 'app-e-exam.herokuapp.com',
+        path: 'getSpacificQuestion/$id',
+        queryParameters: queryParams);
+    var response = await http.get(uri, headers: header);
+    jsonData = json.decode(response.body);
+    if (response.statusCode == 200) {
+      setState(() {
+        _isLoading = false;
+      });
+      print(jsonData);
+    } else {
+      print(jsonData);
+    }
   }
 }

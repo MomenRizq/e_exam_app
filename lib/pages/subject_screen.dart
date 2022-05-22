@@ -28,10 +28,12 @@ class _subjectScreenState extends State<subjectScreen> {
 
   bool _isLoading = false;
 
-  String? idExam ;
-  String? nameOfExam;
-  int ?timer ;
-  int ?Score;
+  List<String> idExam = [];
+
+  List<String> nameOfExam = [];
+  List<int> timer = [];
+
+  List<int> Score = [];
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +91,7 @@ class _subjectScreenState extends State<subjectScreen> {
                 ),
                 onTap: () {
                   id = widget.SubjectsId[i];
-                  Ex(id!, widget.token);
+                  Ex_api(id!, widget.token);
                   print(widget.SubjectsName.toString());
                   print(id);
                 },
@@ -98,7 +100,7 @@ class _subjectScreenState extends State<subjectScreen> {
     );
   }
 
-  Ex(String id, String token) async {
+  Ex_api(String id, String token) async {
     var jsonData = null;
 
     Map<String, String> queryParams = {
@@ -110,28 +112,31 @@ class _subjectScreenState extends State<subjectScreen> {
     };
     String url = "https://app-e-exam.herokuapp.com/getSpacificExam";
     var uri = Uri(
-      scheme: 'https',
-      host: 'app-e-exam.herokuapp.com',
-      path: 'getSpacificExam/$id',
-      queryParameters: queryParams
-    );
-    var response = await http.get(uri,headers: header);
+        scheme: 'https',
+        host: 'app-e-exam.herokuapp.com',
+        path: 'getSpacificExam/$id',
+        queryParameters: queryParams);
+    var response = await http.get(uri, headers: header);
     jsonData = json.decode(response.body);
     if (response.statusCode == 200) {
-      idExam = jsonData["data"]["_id"];
-      nameOfExam = jsonData["data"]["examName"];
-      timer = jsonData["data"]["timer"];
-      Score = jsonData["data"]["finalScore"];
+      final data = jsonData["data"];
+
+      for (int i = 0; i < data.length; i++) {
+        idExam.add(jsonData["data"][i]["_id"]);
+        nameOfExam.add(jsonData["data"][i]["examName"]);
+        timer.add(jsonData["data"][i]["timer"]);
+        Score.add(jsonData["data"][i]["finalScore"]);
+      }
+      print(idExam);
+      print(nameOfExam);
+      print(timer);
+      print(Score);
       setState(() {
         _isLoading = false;
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => cardExams(idExam: idExam!, nameOfExam: nameOfExam!, timer: timer!, Score: Score!)));
+       Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>cardExams(idExam: idExam, nameOfExam: nameOfExam, timer: timer, Score: Score, token: widget.token,)), );
       });
       print(jsonData);
-
-
-    }
-     else {
+    } else {
       print(jsonData);
     }
   }

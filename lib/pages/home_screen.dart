@@ -321,12 +321,9 @@ class _homeScreenState extends State<homeScreen> {
       for(int i = 0 ; i< data.length; i++)
       {
         LSubjectName.add(jsonData["data"][i]["subjectName"]);
-      }
-
-      for(int i = 0 ; i<data.length; i++)
-      {
         LSubjectId.add(jsonData["data"][i]["_id"]);
       }
+
 
     } else {
       print(response.body);
