@@ -9,7 +9,6 @@ import 'package:e_exam_app/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'widgets/subjectItems.dart';
-import 'package:e_exam_app/Data.dart';
 import 'package:http/http.dart' as http;
 
 class subjectScreen extends StatefulWidget {
