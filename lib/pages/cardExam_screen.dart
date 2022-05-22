@@ -1,18 +1,24 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:e_exam_app/pages/quize_screen.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
-
 class cardExams extends StatefulWidget {
-  final List <String> idExam ;
-  final List <String>nameOfExam;
-  final List<int> timer ;
+  final List<String> idExam;
+
+  final List<String> nameOfExam;
+  final List<int> timer;
+
   final List<int> Score;
   final String token;
 
-  cardExams({required this.idExam, required this.nameOfExam,required this.timer, required this.Score, required this.token});
+  cardExams({required this.idExam,
+    required this.nameOfExam,
+    required this.timer,
+    required this.Score,
+    required this.token});
 
   @override
   State<cardExams> createState() => _cardExamsState();
@@ -21,17 +27,12 @@ class cardExams extends StatefulWidget {
 class _cardExamsState extends State<cardExams> {
   bool _isLoading = false;
 
-  final List<Map<String, Object>> _questions = [
-  {
-  'questionText': 'What\'s your favourite color?',
-  'answers': [
-  {'text': 'Black', 'score': 1},
-  {'text': 'Green', 'score': 0},
-  {'text': 'Blue', 'score': 0},
-  {'text': 'Yellow', 'score': 0},
-  ]
-},];
-
+  List<String> _Questions = [];
+  List<String> _answer1 = [];
+  List<String> _answer2 = [];
+  List<String> _answer3 = [];
+  List<String> _answer4 = [];
+  List<String> _correctanswer = [];
 
 
 
@@ -51,8 +52,12 @@ class _cardExamsState extends State<cardExams> {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: <Color>[
-                      Theme.of(context).primaryColor,
-                      Theme.of(context).accentColor,
+                      Theme
+                          .of(context)
+                          .primaryColor,
+                      Theme
+                          .of(context)
+                          .accentColor,
                     ])),
           ),
         ),
@@ -60,56 +65,67 @@ class _cardExamsState extends State<cardExams> {
             padding: EdgeInsets.all(25),
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: 300,
-              childAspectRatio: 3 /1.25,
+              childAspectRatio: 3 / 1.25,
               crossAxisSpacing: 15,
               mainAxisSpacing: 15,
             ),
             children: [
               for (int i = 0; i < widget.idExam.length; i++)
-              InkWell(
-                child: Container(
-                  padding: EdgeInsets.all(25),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(15),
-                    gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Theme.of(context).primaryColor,
-                          Theme.of(context).accentColor
-                        ]),
-                  ),
-                  child: ListTile(
-                    title: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      child: Text(
-                        widget.nameOfExam[i],
-                        style: TextStyle(
-                            fontSize: 23,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white
+                InkWell(
+                  child: Container(
+                    padding: EdgeInsets.all(25),
+                    decoration: BoxDecoration(
+                      color: Theme
+                          .of(context)
+                          .primaryColor,
+                      borderRadius: BorderRadius.circular(15),
+                      gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Theme
+                                .of(context)
+                                .primaryColor,
+                            Theme
+                                .of(context)
+                                .accentColor
+                          ]),
+                    ),
+                    child: ListTile(
+                      title: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: Text(
+                          widget.nameOfExam[i],
+                          style: TextStyle(
+                              fontSize: 23,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                          textAlign: TextAlign.start,
                         ),
-                        textAlign: TextAlign.start,
                       ),
-                    ),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(left:2),
-                      child: Text(
-                        "Time : ${widget.timer[i]}  Score:${widget.Score[i]}",
-                        style: TextStyle(fontSize: 12, color: Colors.white ,),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(left: 2),
+                        child: Text(
+                          "Time : ${widget.timer[i]}  Score:${widget.Score[i]}",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                    ),
-                    trailing: IconButton(
-                      onPressed: () {
-                        Quize_api(widget.idExam[i], widget.token);
-                      },
-                      icon: Icon(Icons.play_arrow , size: 50,color: Colors.white,),
+                      trailing: IconButton(
+                        onPressed: () {
+                          Quize_api(widget.idExam[i], widget.token);
+                        },
+                        icon: Icon(
+                          Icons.play_arrow,
+                          size: 50,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-
-              ),
             ]));
   }
 
@@ -131,11 +147,25 @@ class _cardExamsState extends State<cardExams> {
         queryParameters: queryParams);
     var response = await http.get(uri, headers: header);
     jsonData = json.decode(response.body);
+    final data = jsonData;
+    int n = data.length;
     if (response.statusCode == 200) {
       setState(() {
         _isLoading = false;
+        for (int i = 0; i < data.length; i++)
+          {
+            _Questions.add(jsonData[i]["question"]);
+            _answer1.add(jsonData[i]["answer1"]);
+            _answer2.add(jsonData[i]["answer2"]);
+            _answer3.add(jsonData[i]["answer3"]);
+            _answer4.add(jsonData[i]["answer4"]);
+            _correctanswer.add(jsonData[i]["correctAnswer"]);
+          }
+        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>quizeScreen(Questions: _Questions, answer1: _answer1, answer2: _answer2, answer3: _answer3, answer4: _answer4, correctanswer: _correctanswer)), );
+
       });
-      print(jsonData);
+      print(_Questions);
+    print(jsonData);
     } else {
       print(jsonData);
     }
