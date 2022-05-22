@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'forgot_password_page.dart';
 import 'profile_page.dart';
 import 'registration_page.dart';
-import 'widgets/header_widget.dart';
+import '../widgets/header_widget.dart';
 import 'package:e_exam_app/pages/profile_page.dart';
 
 class LoginPage extends StatefulWidget {

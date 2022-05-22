@@ -316,26 +316,18 @@ class _homeScreenState extends State<homeScreen> {
             builder: (context) => subjectScreen(LSubjectName, LSubjectId ,token)));
       });
 
+      final data = jsonData["data"];
 
-      LSubjectName = [
-        jsonData["data"][0]["subjectName"],
-        jsonData["data"][1]["subjectName"],
-      ];
+      for(int i = 0 ; i< data.length; i++)
+      {
+        LSubjectName.add(jsonData["data"][i]["subjectName"]);
+      }
 
-      LSubjectId = [
-        jsonData["data"][0]["_id"],
-        jsonData["data"][1]["_id"],
-      ];
+      for(int i = 0 ; i<data.length; i++)
+      {
+        LSubjectId.add(jsonData["data"][i]["_id"]);
+      }
 
-      /*for(int i = 0 ; i < 2; i++)
-        {
-          subjectName =jsonData["data"][i]["subjectName"] ;
-          print(subjectName);
-        }*/
-
-      print(LSubjectName);
-      print(LSubjectId);
-      print(response.body);
     } else {
       print(response.body);
       message = jsonData["message"];
@@ -345,10 +337,6 @@ class _homeScreenState extends State<homeScreen> {
           return ThemeHelper().alartDialog("Error", message!, context);
         },
       );
-      // message = jsonData["message"] ;
-      //Future.delayed(const Duration(milliseconds: 2000), () {
-      //showAlertDialog(context);
-      //});
     }
   }
 }

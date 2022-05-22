@@ -4,11 +4,10 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:e_exam_app/common/theme_helper.dart';
-import 'package:e_exam_app/pages/exam_box_Screen.dart';
+import 'package:e_exam_app/pages/cardExam_screen.dart';
 import 'package:e_exam_app/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'widgets/subjectItems.dart';
 import 'package:http/http.dart' as http;
 
 class subjectScreen extends StatefulWidget {
@@ -28,6 +27,11 @@ class _subjectScreenState extends State<subjectScreen> {
   var random_array;
 
   bool _isLoading = false;
+
+  String? idExam ;
+  String? nameOfExam;
+  int ?timer ;
+  int ?Score;
 
   @override
   Widget build(BuildContext context) {
@@ -111,19 +115,24 @@ class _subjectScreenState extends State<subjectScreen> {
       path: 'getSpacificExam/$id',
       queryParameters: queryParams
     );
-
     var response = await http.get(uri,headers: header);
+    jsonData = json.decode(response.body);
     if (response.statusCode == 200) {
-      var json = jsonDecode(response.body);
-      print(response.body);
-      // Do whatever you want to do with json.
+      idExam = jsonData["data"]["_id"];
+      nameOfExam = jsonData["data"]["examName"];
+      timer = jsonData["data"]["timer"];
+      Score = jsonData["data"]["finalScore"];
+      setState(() {
+        _isLoading = false;
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => cardExams(idExam: idExam!, nameOfExam: nameOfExam!, timer: timer!, Score: Score!)));
+      });
+      print(jsonData);
+
+
     }
      else {
-      print(response.body);
-      // message = jsonData["message"] ;
-      //Future.delayed(const Duration(milliseconds: 2000), () {
-      //showAlertDialog(context);
-      //});
+      print(jsonData);
     }
   }
 }
