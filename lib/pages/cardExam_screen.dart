@@ -161,11 +161,9 @@ class _cardExamsState extends State<cardExams> {
             _answer4.add(jsonData[i]["answer4"]);
             _correctanswer.add(jsonData[i]["correctAnswer"]);
           }
-        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>quizeScreen(Questions: _Questions, answer1: _answer1, answer2: _answer2, answer3: _answer3, answer4: _answer4, correctanswer: _correctanswer)), );
-
+   Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>quizeScreen(Questions: _Questions, answer1: _answer1, answer2: _answer2, answer3: _answer3, answer4: _answer4, correctanswer: _correctanswer)), );
+        print(jsonData);
       });
-      print(_Questions);
-    print(jsonData);
     } else {
       print(jsonData);
     }
