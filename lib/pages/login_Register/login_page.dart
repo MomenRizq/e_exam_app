@@ -1,4 +1,5 @@
-import 'package:e_exam_app/pages/home_screen.dart';
+import 'package:e_exam_app/pages/professor/home_Screen_Professor.dart';
+import 'package:e_exam_app/pages/student/home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +8,8 @@ import 'dart:convert';
 import 'package:e_exam_app/common/theme_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'forgot_password_page.dart';
-import 'profile_page.dart';
 import 'registration_page.dart';
-import '../widgets/header_widget.dart';
-import 'package:e_exam_app/pages/profile_page.dart';
+import '../../common/header_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -21,7 +20,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
-  double _headerHeight = 250;
+  double _headerHeight = 200;
   Key _formKey = GlobalKey<FormState>();
   final emailController = new TextEditingController();
   final passController = new TextEditingController();
@@ -53,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                             fontSize: 60, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        'Signin into your account',
+                        'Signin into your account to Start Exam !',
                         style: TextStyle(color: Colors.grey),
                       ),
                       SizedBox(height: 30.0),
@@ -201,13 +200,25 @@ class _LoginPageState extends State<LoginPage> {
         var token = jsonData["token"];
         var email = jsonData["user"]["email"];
         var name = jsonData["user"]["name"];
+        var role = jsonData["user"]["role"];
 
         setState(() {
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-              builder: (BuildContext context) => homeScreen(token: token, name: name, email: email)), (
-              Route<dynamic> route) => false);
-          print("token" + token + response.body +" email " + email);
-
+          if(role == "student") {
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    homeScreenStudent(
+                        token: token, name: name, email: email)), (
+                Route<dynamic> route) => false);
+            print("token" + token + response.body + " email " + email);
+          }
+          else
+            {
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      homeScreenProfessor(
+                          token: token, name: name, email: email)), (
+                  Route<dynamic> route) => false);
+            }
         }
         );
       }

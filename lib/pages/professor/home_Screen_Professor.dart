@@ -1,35 +1,33 @@
-import 'dart:convert';
-
 import 'package:e_exam_app/common/theme_helper.dart';
-import 'package:e_exam_app/pages/forgot_password_page.dart';
-import 'package:e_exam_app/pages/forgot_password_verification_page.dart';
-import 'package:e_exam_app/pages/login_page.dart';
-import 'package:e_exam_app/pages/registration_page.dart';
+import 'package:e_exam_app/pages/login_Register/registration_page.dart';
 import 'package:e_exam_app/pages/splash_screen.dart';
-import 'package:e_exam_app/pages/subject_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import '../login_Register/forgot_password_page.dart';
+import '../login_Register/forgot_password_verification_page.dart';
+import '../login_Register/login_page.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:dio/dio.dart';
+import 'dart:convert';
 
-class homeScreen extends StatefulWidget {
+import 'SubjectsProf_screen.dart';
+
+class homeScreenProfessor extends StatefulWidget {
   final token;
 
   final name;
 
   final email;
 
-  const homeScreen(
-      {required this.token, required this.name, required this.email});
-
+  const homeScreenProfessor({ this.token, this.name, this.email}) ;
   @override
-  State<homeScreen> createState() => _homeScreenState();
+  _homeScreenProfessorState createState() => _homeScreenProfessorState();
 }
 
-class _homeScreenState extends State<homeScreen> {
+class _homeScreenProfessorState extends State<homeScreenProfessor> {
   double _drawerIconSize = 24;
-
   double _drawerFontSize = 17;
   bool _isLoading = false;
   String? message;
@@ -37,7 +35,6 @@ class _homeScreenState extends State<homeScreen> {
 
   List<String> LSubjectName = [];
   List<String> LSubjectId = [];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,9 +51,9 @@ class _homeScreenState extends State<homeScreen> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: <Color>[
-                Theme.of(context).primaryColor,
-                Theme.of(context).accentColor,
-              ])),
+                    Theme.of(context).primaryColor,
+                    Theme.of(context).accentColor,
+                  ])),
         ),
       ),
       body: GridView(
@@ -118,8 +115,7 @@ class _homeScreenState extends State<homeScreen> {
                 textAlign: TextAlign.center,
               ),
             ),
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => subjectScreen(LSubjectName, LSubjectId,widget.token))),
+            onTap: () {},
           ),
         ],
       ),
@@ -130,13 +126,13 @@ class _homeScreenState extends State<homeScreen> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   stops: [
-                0.0,
-                1.0
-              ],
+                    0.0,
+                    1.0
+                  ],
                   colors: [
-                Theme.of(context).primaryColor.withOpacity(0.2),
-                Theme.of(context).accentColor.withOpacity(0.5),
-              ])),
+                    Theme.of(context).primaryColor.withOpacity(0.2),
+                    Theme.of(context).accentColor.withOpacity(0.5),
+                  ])),
           child: ListView(
             children: [
               DrawerHeader(
@@ -292,13 +288,12 @@ class _homeScreenState extends State<homeScreen> {
           ),
         ),
       ),
-    );
-    ;
-  }
 
+    );
+  }
   Subjects(String token) async {
     var jsonData = null;
-    var uri = 'https://app-e-exam.herokuapp.com/studentSubjects';
+    var uri = 'https://app-e-exam.herokuapp.com/teacherSubjects';
     var response = await http.get(
       Uri.parse(uri),
       headers: {
@@ -310,20 +305,20 @@ class _homeScreenState extends State<homeScreen> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     jsonData = json.decode(response.body);
     if (response.statusCode == 200) {
-      setState(() {
-        _isLoading = false;
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => subjectScreen(LSubjectName, LSubjectId ,token)));
-      });
 
       final data = jsonData["data"];
+      print(response.body);
 
       for(int i = 0 ; i< data.length; i++)
       {
         LSubjectName.add(jsonData["data"][i]["subjectName"]);
         LSubjectId.add(jsonData["data"][i]["_id"]);
       }
-
+      setState(() {
+        _isLoading = false;
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => subjectsProfScreen(LSubjectName, LSubjectId ,token)));
+      });
 
     } else {
       print(response.body);

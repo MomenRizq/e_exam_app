@@ -4,8 +4,7 @@ import 'package:e_exam_app/common/theme_helper.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 
-import 'profile_page.dart';
-import '../widgets/header_widget.dart';
+import '../../common/header_widget.dart';
 
 class ForgotPasswordVerificationPage extends StatefulWidget {
   const ForgotPasswordVerificationPage({Key? key}) : super(key: key);
@@ -134,14 +133,7 @@ class _ForgotPasswordVerificationPageState extends State<ForgotPasswordVerificat
                                     ),
                                   ),
                                 ),
-                                onPressed: _pinSuccess ? () {
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: (context) => ProfilePage()
-                                      ),
-                                          (Route<dynamic> route) => false
-                                  );
-                                } : null,
+                                onPressed: (){},
                               ),
                             ),
                           ],

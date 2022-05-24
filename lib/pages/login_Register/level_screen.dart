@@ -1,10 +1,9 @@
 import 'dart:convert';
 
-import 'package:e_exam_app/pages/login_page.dart';
+import 'package:e_exam_app/pages/login_Register/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:e_exam_app/common/theme_helper.dart';
-import 'package:e_exam_app/pages/profile_page.dart';
-import 'package:e_exam_app/pages/registration_page.dart';
+import 'package:e_exam_app/pages/login_Register/registration_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 

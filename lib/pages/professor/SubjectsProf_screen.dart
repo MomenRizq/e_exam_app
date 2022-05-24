@@ -4,35 +4,33 @@ import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:e_exam_app/common/theme_helper.dart';
-import 'package:e_exam_app/pages/cardExam_screen.dart';
+import 'package:e_exam_app/pages/professor/cardExamsProf_screen.dart';
+import 'package:e_exam_app/pages/student/cardExam_screen.dart';
 import 'package:e_exam_app/pages/splash_screen.dart';
+import 'package:e_exam_app/pages/professor/addQuestion.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-class subjectScreen extends StatefulWidget {
+class subjectsProfScreen extends StatefulWidget {
   final List SubjectsName;
   final List SubjectsId;
   final token;
 
-  const subjectScreen(this.SubjectsName, this.SubjectsId, this.token);
+  const subjectsProfScreen(this.SubjectsName, this.SubjectsId, this.token);
 
   @override
-  State<subjectScreen> createState() => _subjectScreenState();
+  State<subjectsProfScreen> createState() => _subjectsProfScreenState();
 }
 
-class _subjectScreenState extends State<subjectScreen> {
+class _subjectsProfScreenState extends State<subjectsProfScreen> {
   String? id;
-
-  var random_array;
 
   bool _isLoading = false;
 
   List<String> idExam = [];
-
   List<String> nameOfExam = [];
   List<int> timer = [];
-
   List<int> Score = [];
 
   @override
@@ -51,9 +49,9 @@ class _subjectScreenState extends State<subjectScreen> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: <Color>[
-                Theme.of(context).primaryColor,
-                Theme.of(context).accentColor,
-              ])),
+                    Theme.of(context).primaryColor,
+                    Theme.of(context).accentColor,
+                  ])),
         ),
       ),
       body: GridView(
@@ -91,16 +89,30 @@ class _subjectScreenState extends State<subjectScreen> {
                 ),
                 onTap: () {
                   id = widget.SubjectsId[i];
-                  Ex_api(id!, widget.token);
+                  ShowEx_api(id!, widget.token);
                   print(widget.SubjectsName.toString());
-                  print(id);
                 },
               )
           ]),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showAddBottomSheet(widget.SubjectsName , widget.SubjectsId , widget.token);
+        },
+        child: Icon(Icons.add),
+        shape: StadiumBorder(side: BorderSide(color: Colors.white, width: 4)),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
-  Ex_api(String id, String token) async {
+  void showAddBottomSheet(List SubjectsName , List SubjectId , token) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return addQuestion(SubjectsId: SubjectId , SubjectsName:SubjectsName , token: token,);
+        });
+  }
+  ShowEx_api(String id, String token) async {
     var jsonData = null;
 
     Map<String, String> queryParams = {
@@ -127,13 +139,9 @@ class _subjectScreenState extends State<subjectScreen> {
         timer.add(jsonData["data"][i]["timer"]);
         Score.add(jsonData["data"][i]["finalScore"]);
       }
-      print(idExam);
-      print(nameOfExam);
-      print(timer);
-      print(Score);
       setState(() {
         _isLoading = false;
-       Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>cardExams(idExam: idExam, nameOfExam: nameOfExam, timer: timer, Score: Score, token: widget.token,)), );
+        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>cardExamsProf(idExam: idExam, nameOfExam: nameOfExam, timer: timer, Score: Score, token: widget.token,)), );
       });
       print(jsonData);
     } else {

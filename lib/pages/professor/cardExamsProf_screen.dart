@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:e_exam_app/pages/quize_screen.dart';
+import 'package:e_exam_app/pages/professor/quizProf_screen.dart';
+import 'package:e_exam_app/pages/student/quize_screen.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
-class cardExams extends StatefulWidget {
+class cardExamsProf extends StatefulWidget {
   final List<String> idExam;
 
   final List<String> nameOfExam;
@@ -14,19 +15,18 @@ class cardExams extends StatefulWidget {
   final List<int> Score;
   final String token;
 
-  cardExams({required this.idExam,
+  cardExamsProf({required this.idExam,
     required this.nameOfExam,
     required this.timer,
     required this.Score,
     required this.token});
 
   @override
-  State<cardExams> createState() => _cardExamsState();
+  State<cardExamsProf> createState() => _cardExamsProfState();
 }
 
-class _cardExamsState extends State<cardExams> {
+class _cardExamsProfState extends State<cardExamsProf> {
   bool _isLoading = false;
-
   List<String> _Questions = [];
   List<String> _answer1 = [];
   List<String> _answer2 = [];
@@ -153,17 +153,20 @@ class _cardExamsState extends State<cardExams> {
       setState(() {
         _isLoading = false;
         for (int i = 0; i < data.length; i++)
-          {
-            _Questions.add(jsonData[i]["question"]);
-            _answer1.add(jsonData[i]["answer1"]);
-            _answer2.add(jsonData[i]["answer2"]);
-            _answer3.add(jsonData[i]["answer3"]);
-            _answer4.add(jsonData[i]["answer4"]);
-            _correctanswer.add(jsonData[i]["correctAnswer"]);
-          }
-   Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>quizeScreen(Questions: _Questions, answer1: _answer1, answer2: _answer2, answer3: _answer3, answer4: _answer4, correctanswer: _correctanswer)), );
-        print(jsonData);
+        {
+          _Questions.add(jsonData[i]["question"]);
+          _answer1.add(jsonData[i]["answer1"]);
+          _answer2.add(jsonData[i]["answer2"]);
+          _answer3.add(jsonData[i]["answer3"]);
+          _answer4.add(jsonData[i]["answer4"]);
+          _correctanswer.add(jsonData[i]["correctAnswer"]);
+        }
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context)=>quizeProfScreen(Questions: _Questions, answer1: _answer1, answer2: _answer2, answer3: _answer3, answer4: _answer4, correctanswer: _correctanswer)), (
+            Route<dynamic> route) => false);
+
       });
+      print(_Questions);
+      print(jsonData);
     } else {
       print(jsonData);
     }
