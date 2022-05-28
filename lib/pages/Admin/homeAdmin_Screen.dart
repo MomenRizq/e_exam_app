@@ -1,7 +1,9 @@
 import 'package:e_exam_app/common/theme_helper.dart';
-import 'package:e_exam_app/pages/login_Register/login_page.dart';
+import 'package:e_exam_app/pages/Admin/Subject_Screen.dart';
+import 'package:e_exam_app/pages/Admin/prof_Screen.dart';
 import 'package:e_exam_app/pages/login_Register/registration_page.dart';
 import 'package:e_exam_app/pages/splash_screen.dart';
+import 'package:e_exam_app/pages/student/subject_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,31 +14,46 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'Department_Screen.dart';
+import 'levels_Screen.dart';
 
-import 'SubjectsProf1_screen.dart';
-import 'SubjectsProf_screen.dart';
 
-class homeScreenProfessor extends StatefulWidget {
+class homeScreenAdmin extends StatefulWidget {
   final token;
 
   final name;
 
   final email;
 
-  const homeScreenProfessor({ this.token, this.name, this.email}) ;
+  const homeScreenAdmin({ this.token, this.name, this.email}) ;
   @override
-  _homeScreenProfessorState createState() => _homeScreenProfessorState();
+  _homeScreenAdminState createState() => _homeScreenAdminState();
 }
 
-class _homeScreenProfessorState extends State<homeScreenProfessor> {
+class _homeScreenAdminState extends State<homeScreenAdmin> {
   double _drawerIconSize = 24;
   double _drawerFontSize = 17;
   bool _isLoading = false;
   String? message;
   var sub;
 
-  List<String> LSubjectName = [];
-  List<String> LSubjectId = [];
+  List<String> levelsListName= [];
+  List<String> levelsListId= [];
+
+  List<String> departmentsListName = [];
+  List<String> departmentsListId = [];
+
+  List<String> subjectsListName = [];
+  List<String> subjectsListId = [];
+  List<String> subjectsListLevel = [];
+  List<String> subjectsListDepart = [];
+  List<String> subjectsListProf = [];
+
+  List<String> ProfListFirstName = [];
+  List<String> ProfListLastName = [];
+  List<String> ProfListId = [];
+  List<String> ProfListEmail = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,7 +99,7 @@ class _homeScreenProfessorState extends State<homeScreenProfessor> {
                     ]),
               ),
               child: Text(
-                "Subject",
+                "Levels",
                 style: TextStyle(
                     fontSize: 23,
                     fontWeight: FontWeight.bold,
@@ -91,7 +108,11 @@ class _homeScreenProfessorState extends State<homeScreenProfessor> {
               ),
             ),
             onTap: () {
-              Subjects(widget.token);
+              levelsApi();
+              setState(() {
+                levelsListName = [];
+                levelsListId = [];
+              });
             },
           ),
           InkWell(
@@ -109,7 +130,7 @@ class _homeScreenProfessorState extends State<homeScreenProfessor> {
                     ]),
               ),
               child: Text(
-                "Grade of Student",
+                "Departments",
                 style: TextStyle(
                     fontSize: 23,
                     fontWeight: FontWeight.bold,
@@ -117,7 +138,86 @@ class _homeScreenProfessorState extends State<homeScreenProfessor> {
                 textAlign: TextAlign.center,
               ),
             ),
-            onTap: () {AllGrade(widget.token);},
+            onTap: () {DepartmentsApi();},
+          ),
+          InkWell(
+            child: Container(
+              padding: EdgeInsets.all(25),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(15),
+                gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Theme.of(context).primaryColor,
+                      Theme.of(context).accentColor
+                    ]),
+              ),
+              child: Text(
+                "Subjects",
+                style: TextStyle(
+                    fontSize: 23,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            onTap: () {
+              SubjectsApi(widget.token);
+            },
+          ),
+          InkWell(
+            child: Container(
+              padding: EdgeInsets.all(25),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(15),
+                gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Theme.of(context).primaryColor,
+                      Theme.of(context).accentColor
+                    ]),
+              ),
+              child: Text(
+                "Professor",
+                style: TextStyle(
+                    fontSize: 23,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            onTap: () {
+              ProfessorApi(widget.token);
+            },
+          ),
+          InkWell(
+            child: Container(
+              padding: EdgeInsets.all(25),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(15),
+                gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Theme.of(context).primaryColor,
+                      Theme.of(context).accentColor
+                    ]),
+              ),
+              child: Text(
+                "Students",
+                style: TextStyle(
+                    fontSize: 23,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            onTap: () {},
           ),
         ],
       ),
@@ -163,12 +263,12 @@ class _homeScreenProfessorState extends State<homeScreenProfessor> {
               ),
               ListTile(
                 leading: Icon(
-                  Icons.book,
+                  Icons.screen_lock_landscape_rounded,
                   size: _drawerIconSize,
                   color: Theme.of(context).accentColor,
                 ),
                 title: Text(
-                  'Subjecs',
+                  'Splash Screen',
                   style: TextStyle(
                       fontSize: 17, color: Theme.of(context).accentColor),
                 ),
@@ -177,15 +277,15 @@ class _homeScreenProfessorState extends State<homeScreenProfessor> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                             Subjects(widget.token)));
+                              SplashScreen(title: "Splash Screen")));
                 },
               ),
               ListTile(
-                leading: Icon(Icons.grading,
+                leading: Icon(Icons.login_rounded,
                     size: _drawerIconSize,
                     color: Theme.of(context).accentColor),
                 title: Text(
-                  'Degree for Students',
+                  'Login Page',
                   style: TextStyle(
                       fontSize: _drawerFontSize,
                       color: Theme.of(context).accentColor),
@@ -193,7 +293,28 @@ class _homeScreenProfessorState extends State<homeScreenProfessor> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Subjects(widget.token)),
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                },
+              ),
+              Divider(
+                color: Theme.of(context).primaryColor,
+                height: 1,
+              ),
+              ListTile(
+                leading: Icon(Icons.person_add_alt_1,
+                    size: _drawerIconSize,
+                    color: Theme.of(context).accentColor),
+                title: Text(
+                  'Registration Page',
+                  style: TextStyle(
+                      fontSize: _drawerFontSize,
+                      color: Theme.of(context).accentColor),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RegistrationPage()),
                   );
                 },
               ),
@@ -262,11 +383,7 @@ class _homeScreenProfessorState extends State<homeScreenProfessor> {
                       color: Theme.of(context).accentColor),
                 ),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => LoginPage()),
-                  );
+                  SystemNavigator.pop();
                 },
               ),
             ],
@@ -276,33 +393,33 @@ class _homeScreenProfessorState extends State<homeScreenProfessor> {
 
     );
   }
-  Subjects(String token) async {
+
+  levelsApi() async {
     var jsonData = null;
-    var uri = 'https://app-e-exam.herokuapp.com/teacherSubjects';
+    var uri = 'https://app-e-exam.herokuapp.com/levels';
     var response = await http.get(
       Uri.parse(uri),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $token'
       },
     );
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     jsonData = json.decode(response.body);
     if (response.statusCode == 200) {
 
-      final data = jsonData["data"];
+      final data = jsonData["levels"];
       print(response.body);
-
       for(int i = 0 ; i< data.length; i++)
       {
-        LSubjectName.add(jsonData["data"][i]["subjectName"]);
-        LSubjectId.add(jsonData["data"][i]["_id"]);
+        levelsListName.add(jsonData["levels"][i]["levelName"]);
+        levelsListId.add(jsonData["levels"][i]["_id"]);
       }
       setState(() {
-        _isLoading = false;
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => subjectsProfScreen(LSubjectName, LSubjectId ,token)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>levelsScreen(nameOfLevels: levelsListName,idOfLevels: levelsListId,token: widget.token,)));
+        print(response.body);
+        print(levelsListName);
+        print(levelsListId);
       });
 
     } else {
@@ -316,9 +433,49 @@ class _homeScreenProfessorState extends State<homeScreenProfessor> {
       );
     }
   }
-  AllGrade(String token) async {
+  DepartmentsApi() async {
     var jsonData = null;
-    var uri = 'https://app-e-exam.herokuapp.com/teacherSubjects';
+    var uri = 'https://app-e-exam.herokuapp.com/departments';
+    var response = await http.get(
+      Uri.parse(uri),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    );
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    jsonData = json.decode(response.body);
+    if (response.statusCode == 200) {
+
+      final data = jsonData["data"];
+      print(response.body);
+      for(int i = 0 ; i< data.length; i++)
+      {
+        departmentsListName.add(jsonData["data"][i]["departmentName"]);
+        departmentsListId.add(jsonData["data"][i]["_id"]);
+      }
+      setState(() {
+        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=> departmentsScreen(nameOfDepartment: departmentsListName , idOfDepartment: departmentsListId,token: widget.token,)));
+        print(response.body);
+        print(levelsListName);
+        print(levelsListId);
+      });
+
+
+    } else {
+      print(response.body);
+      message = jsonData["message"];
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return ThemeHelper().alartDialog("Error", message!, context);
+        },
+      );
+    }
+  }
+  SubjectsApi(String token) async {
+    var jsonData = null;
+    var uri = 'https://app-e-exam.herokuapp.com/subjects';
     var response = await http.get(
       Uri.parse(uri),
       headers: {
@@ -330,20 +487,66 @@ class _homeScreenProfessorState extends State<homeScreenProfessor> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     jsonData = json.decode(response.body);
     if (response.statusCode == 200) {
-
       final data = jsonData["data"];
-      print(response.body);
-
       for(int i = 0 ; i< data.length; i++)
       {
-        LSubjectName.add(jsonData["data"][i]["subjectName"]);
-        LSubjectId.add(jsonData["data"][i]["_id"]);
+        subjectsListName.add(jsonData["data"][i]["subjectName"]);
+        subjectsListId.add(jsonData["data"][i]["_id"]);
+        subjectsListLevel.add(jsonData["data"][i]["level"]["levelName"]);
+        subjectsListDepart.add(jsonData["data"][i]["department"]["departmentName"]);
+        subjectsListProf.add(jsonData["data"][i]["prof"]["email"]);
       }
+
+      print(response.body);
       setState(() {
-        _isLoading = false;
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => subjectsProf1Screen(LSubjectName, LSubjectId ,token)));
+       Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>subjectsScreenAdmin(subjectsListName, subjectsListId, token,subjectsListLevel,subjectsListDepart,subjectsListProf)));
+        print(response.body);
+        print(subjectsListName);
+        print(subjectsListId);
       });
+
+
+    } else {
+      print(response.body);
+      message = jsonData["message"];
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return ThemeHelper().alartDialog("Error", message!, context);
+        },
+      );
+    }
+  }
+  ProfessorApi(String token) async {
+    var jsonData = null;
+    var uri = 'https://app-e-exam.herokuapp.com/professors';
+    var response = await http.get(
+      Uri.parse(uri),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    jsonData = json.decode(response.body);
+    if (response.statusCode == 200) {
+      final data = jsonData["users"];
+      for(int i = 0 ; i< data.length; i++)
+        {
+          ProfListId.add(jsonData["users"][i]["_id"]);
+          ProfListEmail.add(jsonData["users"][i]["email"]);
+          ProfListFirstName.add(jsonData["users"][i]["fristName"]);
+          ProfListLastName.add(jsonData["users"][i]["lastName"]);
+        }
+
+
+      print(response.body);
+      setState(() {
+     Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>ProfScreenAdmin(ProfEmail: ProfListEmail,ProfId: ProfListId,ProfFirstName:ProfListFirstName, ProfLastName: ProfListLastName,token: token,)));
+
+      });
+
 
     } else {
       print(response.body);

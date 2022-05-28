@@ -37,6 +37,17 @@ class _GradeScreenState extends State<GradeScreen> {
             "Grade",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: (){
+              Navigator.pop(context);
+              setState(() {
+               widget.yourScore.clear();
+              widget.SubjectName.clear();
+              widget.examName.clear();
+              });
+            },
+          ) ,
           elevation: 0.5,
           iconTheme: IconThemeData(color: Colors.white),
           flexibleSpace: Container(

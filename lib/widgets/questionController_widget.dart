@@ -300,7 +300,7 @@ class _Questions_ControllerState extends State<Questions_Controller> {
   }
 
   void onDonePressed() {
-    Navigator.push(context,
+    Navigator.pop(context,
         MaterialPageRoute(builder: (context) => homeScreenProfessor(token: widget.token,)));
   }
 

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 
 class Timer extends StatefulWidget {
-  Timer({Key? key, required this.title}) : super(key: key);
+  Timer({ required this.Time});
 
-  final String title;
+  final int Time;
 
   @override
   _TimerState createState() => _TimerState();
@@ -14,13 +14,6 @@ class _TimerState extends State<Timer> with TickerProviderStateMixin {
   int _counter = 0;
   late AnimationController _controller;
   int levelClock = 180;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   void dispose() {
     _controller.dispose();
@@ -45,32 +38,15 @@ class _TimerState extends State<Timer> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text("Timer"),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Countdown(
+        child: Countdown(
               animation: StepTween(
                 begin: levelClock, // THIS IS A USER ENTERED NUMBER
                 end: 0,
               ).animate(_controller),
             ),
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: TextStyle(color: Colors.black),
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
       ),
     );
   }

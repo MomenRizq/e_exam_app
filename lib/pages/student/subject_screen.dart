@@ -43,6 +43,17 @@ class _subjectScreenState extends State<subjectScreen> {
           "Subject",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: (){
+            Navigator.pop(context);
+            setState(() {
+   widget.SubjectsId.clear();
+   widget.SubjectsName.clear();
+
+            });
+          },
+        ) ,
         elevation: 0.5,
         iconTheme: IconThemeData(color: Colors.white),
         flexibleSpace: Container(
@@ -95,8 +106,7 @@ class _subjectScreenState extends State<subjectScreen> {
                   print(widget.SubjectsName.toString());
                   print(id);
                   setState(() {
-                    widget.SubjectsName[i] = [];
-                    widget.SubjectsId[i] = [];
+
                   });
 
 

@@ -14,6 +14,7 @@ class cardExams extends StatefulWidget {
   final List<int> Score;
   final String token;
 
+
   cardExams({required this.idExam,
     required this.nameOfExam,
     required this.timer,
@@ -44,6 +45,18 @@ class _cardExamsState extends State<cardExams> {
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
           elevation: 0.5,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: (){
+              Navigator.pop(context);
+              setState(() {
+                widget.Score.clear();
+                widget.idExam.clear();
+                widget.nameOfExam.clear();
+                widget.timer.clear();
+              });
+            },
+          ) ,
           iconTheme: IconThemeData(color: Colors.white),
           flexibleSpace: Container(
             decoration: BoxDecoration(
@@ -116,9 +129,6 @@ class _cardExamsState extends State<cardExams> {
                         onPressed: () {
                           Quize_api(widget.idExam[i], widget.token);
                           setState(() {
-                            widget.idExam[i]=[] as String ;
-                            widget.nameOfExam[i]=[] as String ;
-                            widget.Score[i] = [] as int;
 
                           });
                         },
@@ -168,17 +178,17 @@ class _cardExamsState extends State<cardExams> {
 
 
         Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => quizeScreen(
-            Questions: _Questions,
-            answer1: _answer1,
-            answer2: _answer2,
-            answer3: _answer3,
-            answer4: _answer4,
-            correctanswer: _correctanswer,
-            idExam: id,
-            token: widget.token,)
-          )
+            context,
+            MaterialPageRoute(builder: (context) => quizeScreen(
+              Questions: _Questions,
+              answer1: _answer1,
+              answer2: _answer2,
+              answer3: _answer3,
+              answer4: _answer4,
+              correctanswer: _correctanswer,
+              idExam: id,
+              token: widget.token,)
+            )
         );
       });
       print(_Questions);

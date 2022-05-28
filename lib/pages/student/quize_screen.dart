@@ -1,3 +1,4 @@
+import 'package:e_exam_app/common/theme_helper.dart';
 import 'package:e_exam_app/pages/student/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -41,7 +42,8 @@ class _quizeScreenState extends State<quizeScreen> {
 
   bool disableAnswer = false;
 
- String allAnswers = "" ;
+  String allAnswers = "" ;
+  String message = "";
 
   @override
   Widget build(BuildContext context) {
@@ -50,184 +52,204 @@ class _quizeScreenState extends State<quizeScreen> {
         title: Text(
           'E exam',
         ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: (){
+            Navigator.pop(context);
+            setState(() {
+              widget.Questions.clear();
+              widget.answer1.clear();
+              widget.answer2.clear();
+              widget.answer3.clear();
+              widget.answer4.clear();
+              widget.correctanswer.clear();
+
+            });
+          },
+        ) ,
       ),
       body: ListView(
         children: [
           if(j !=widget.Questions.length)
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                if (j < widget.Questions.length)
-                  MaterialButton(
-                    onPressed: () => {
-                      setState(() {
-                      })
-                    },
-                    child: Text(
-                      widget.Questions[j],
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontFamily: "Alike",
-                        fontSize: 20.0,
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  if (j < widget.Questions.length)
+                    MaterialButton(
+                      onPressed: () => {
+                        setState(() {
+                        })
+                      },
+                      child: Text(
+                        widget.Questions[j],
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: "Alike",
+                          fontSize: 20.0,
+                        ),
+
                       ),
-
+                      splashColor: Colors.indigo[700],
+                      highlightColor: Colors.indigo[700],
+                      minWidth: 200.0,
+                      height: 200.0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0)),
                     ),
-                    splashColor: Colors.indigo[700],
-                    highlightColor: Colors.indigo[700],
-                    minWidth: 200.0,
-                    height: 200.0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0)),
-                  ),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(25),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Theme.of(context).primaryColor,
-                          Theme.of(context).accentColor
-                        ]),
-                  ),
-                  child: InkWell(
-                    onTap: () {
-                      allAnswers= widget.answer1[j];
-                      checkanswer(allAnswers);
-                      setState(() {
-                        // quizeScreen(Questions: widget.Questions, answer1: widget.answer1, answer2: widget.answer2, answer3: widget.answer3, answer4: widget.answer4, correctanswer: widget.correctanswer);
-                      });
-
-                    },
-                    child: Text(
-                      widget.answer1[j],
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white),
-                      textAlign: TextAlign.center,
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(25),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(10),
+                      gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Theme.of(context).primaryColor,
+                            Theme.of(context).accentColor
+                          ]),
                     ),
-                  ),
-                ),
-                SizedBox(height: 10,),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(25),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Theme.of(context).primaryColor,
-                          Theme.of(context).accentColor
-                        ]),
-                  ),
-                  child: InkWell(
-                    onTap: () {
-                      allAnswers= widget.answer2[j];
-                      checkanswer(allAnswers);
-                      setState(() {
-                        // quizeScreen(Questions: widget.Questions, answer1: widget.answer1, answer2: widget.answer2, answer3: widget.answer3, answer4: widget.answer4, correctanswer: widget.correctanswer);
-                      });
-                    },
-                    child: Text(
-                      widget.answer2[j],
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white),
-                      textAlign: TextAlign.center,
+                    child: InkWell(
+                      onTap: () {
+                        allAnswers= widget.answer1[j];
+                        checkanswer(allAnswers);
+                        setState(() {
+                          // quizeScreen(Questions: widget.Questions, answer1: widget.answer1, answer2: widget.answer2, answer3: widget.answer3, answer4: widget.answer4, correctanswer: widget.correctanswer);
+                        });
+
+                      },
+                      child: Text(
+                        widget.answer1[j],
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(height: 10,),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(25),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Theme.of(context).primaryColor,
-                          Theme.of(context).accentColor
-                        ]),
-                  ),
-                  child: InkWell(
-                    onTap: (){
-
-                      allAnswers= widget.answer3[j];
-                      checkanswer(allAnswers);
-                      setState(() {
-
-                        // quizeScreen(Questions: widget.Questions, answer1: widget.answer1, answer2: widget.answer2, answer3: widget.answer3, answer4: widget.answer4, correctanswer: widget.correctanswer);
-                      });
-                    },
-                    child: Text(
-                      widget.answer3[j],
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white),
-                      textAlign: TextAlign.center,
+                  SizedBox(height: 10,),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(25),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(10),
+                      gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Theme.of(context).primaryColor,
+                            Theme.of(context).accentColor
+                          ]),
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        allAnswers= widget.answer2[j];
+                        checkanswer(allAnswers);
+                        setState(() {
+                          // quizeScreen(Questions: widget.Questions, answer1: widget.answer1, answer2: widget.answer2, answer3: widget.answer3, answer4: widget.answer4, correctanswer: widget.correctanswer);
+                        });
+                      },
+                      child: Text(
+                        widget.answer2[j],
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(height: 10,),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(25),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Theme.of(context).primaryColor,
-                          Theme.of(context).accentColor
-                        ]),
-                  ),
-                  child: InkWell(
-                    onTap: () {
-                      allAnswers= widget.answer4[j];
-                      checkanswer(allAnswers);
-                      setState(() {
-                      });
-                    },
-                    child: Text(
-                      widget.answer4[j],
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white),
-                      textAlign: TextAlign.center,
+                  SizedBox(height: 10,),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(25),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(10),
+                      gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Theme.of(context).primaryColor,
+                            Theme.of(context).accentColor
+                          ]),
+                    ),
+                    child: InkWell(
+                      onTap: (){
+
+                        allAnswers= widget.answer3[j];
+                        checkanswer(allAnswers);
+                        setState(() {
+
+                          // quizeScreen(Questions: widget.Questions, answer1: widget.answer1, answer2: widget.answer2, answer3: widget.answer3, answer4: widget.answer4, correctanswer: widget.correctanswer);
+                        });
+                      },
+                      child: Text(
+                        widget.answer3[j],
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(height: 10,),
+                  SizedBox(height: 10,),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(25),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(10),
+                      gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Theme.of(context).primaryColor,
+                            Theme.of(context).accentColor
+                          ]),
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        allAnswers= widget.answer4[j];
+                        checkanswer(allAnswers);
+                        setState(() {
+                        });
+                      },
+                      child: Text(
+                        widget.answer4[j],
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10,),
 
-              ],
+                ],
+              ),
             ),
-          ),
           if(j ==widget.Questions.length)
             Center(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  SizedBox(height: 100,),
                   Text(
                     'Great job !',
                     style: TextStyle(
-                        fontSize:30 , fontWeight: FontWeight.bold),
+                        fontSize:30 , fontWeight: FontWeight.bold , letterSpacing: 5),
                   ),
+                  SizedBox(height: 18,),
                   Text(
-                    'Your Degree is ${grade} !',
-                    style: TextStyle(color: Colors.grey),
+                    'Your Degree is ${grade} ',
+                    style: TextStyle(color: Colors.grey ,fontSize: 20 ,fontWeight: FontWeight.bold),
                   ),
+                  SizedBox(height: 20,),
                   ElevatedButton(
                     onPressed: () {
                       quizDone(widget.idExam, grade, widget.token);
@@ -235,8 +257,8 @@ class _quizeScreenState extends State<quizeScreen> {
                     child: Container(
                       padding: EdgeInsets.all(15),
                       child: Text(
-                        'Done ',
-                        style: TextStyle(color: Colors.black),
+                        'Finish Exam',
+                        style: TextStyle(color: Colors.black , fontSize: 20),
                       ),
                     ),
                     style: ButtonStyle(
@@ -265,11 +287,11 @@ class _quizeScreenState extends State<quizeScreen> {
         print("j in true $j");
       });
     } else
-    setState(() {
+      setState(() {
 
-      j++;
-      print("j in false $j");
-    });
+        j++;
+        print("j in false $j");
+      });
   }
 
   Future<void> quizDone(String idExam , int Grad , String token) async {
@@ -293,8 +315,28 @@ class _quizeScreenState extends State<quizeScreen> {
       setState(() {
       });
       print(jsonData);
+      message = jsonData["message"];
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return ThemeHelper().alartDialog(
+              "Message",
+              message,
+              context);
+        },
+      );
     } else {
       print(jsonData);
+      message = jsonData["message"];
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return ThemeHelper().alartDialog(
+              "Message",
+              message,
+              context);
+        },
+      );
     }
   }
 }

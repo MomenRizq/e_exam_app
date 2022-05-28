@@ -13,14 +13,14 @@ class quizeProfScreen extends StatefulWidget {
 
   final List<String> correctanswer;
 
-  quizeProfScreen(
-      {required this.Questions,
-        required this.answer1,
-        required this.answer2,
-        required this.answer3,
-        required this.answer4,
-        required this.correctanswer});
+  final idExam;
+  final token;
 
+
+
+
+
+  const quizeProfScreen({ required this.Questions,required   this.answer1,required  this.answer2,required  this.answer3,required  this.answer4,required  this.correctanswer, this.idExam, this.token}) ;
   @override
   _quizeProfScreenState createState() => _quizeProfScreenState();
 }
@@ -41,10 +41,24 @@ class _quizeProfScreenState extends State<quizeProfScreen> {
         title: Text(
           'E exam',
         ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: (){
+            Navigator.pop(context);
+            setState(() {
+              widget.Questions.clear();
+              widget.answer1.clear();
+              widget.answer2.clear();
+              widget.answer3.clear();
+              widget.answer4.clear();
+              widget.correctanswer.clear();
+            });
+          },
+        ) ,
       ),
       body: ListView(
         children: [
-            for(int i = 0 ; i < widget.Questions.length ; i++ )
+            for(int j = 0 ; j < widget.Questions.length ; j++ )
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -87,14 +101,6 @@ class _quizeProfScreenState extends State<quizeProfScreen> {
                           ]),
                     ),
                     child: InkWell(
-                      onTap: () {
-                        allAnswers= widget.answer1[j];
-                        checkanswer(allAnswers);
-                        setState(() {
-                          // quizeScreen(Questions: widget.Questions, answer1: widget.answer1, answer2: widget.answer2, answer3: widget.answer3, answer4: widget.answer4, correctanswer: widget.correctanswer);
-                        });
-
-                      },
                       child: Text(
                         widget.answer1[j],
                         style: TextStyle(
@@ -120,13 +126,6 @@ class _quizeProfScreenState extends State<quizeProfScreen> {
                           ]),
                     ),
                     child: InkWell(
-                      onTap: () {
-                        allAnswers= widget.answer2[j];
-                        checkanswer(allAnswers);
-                        setState(() {
-                          // quizeScreen(Questions: widget.Questions, answer1: widget.answer1, answer2: widget.answer2, answer3: widget.answer3, answer4: widget.answer4, correctanswer: widget.correctanswer);
-                        });
-                      },
                       child: Text(
                         widget.answer2[j],
                         style: TextStyle(
@@ -152,15 +151,6 @@ class _quizeProfScreenState extends State<quizeProfScreen> {
                           ]),
                     ),
                     child: InkWell(
-                      onTap: (){
-
-                        allAnswers= widget.answer3[j];
-                        checkanswer(allAnswers);
-                        setState(() {
-
-                          // quizeScreen(Questions: widget.Questions, answer1: widget.answer1, answer2: widget.answer2, answer3: widget.answer3, answer4: widget.answer4, correctanswer: widget.correctanswer);
-                        });
-                      },
                       child: Text(
                         widget.answer3[j],
                         style: TextStyle(
@@ -186,12 +176,6 @@ class _quizeProfScreenState extends State<quizeProfScreen> {
                           ]),
                     ),
                     child: InkWell(
-                      onTap: () {
-                        allAnswers= widget.answer4[j];
-                        checkanswer(allAnswers);
-                        setState(() {
-                        });
-                      },
                       child: Text(
                         widget.answer4[j],
                         style: TextStyle(
@@ -209,21 +193,5 @@ class _quizeProfScreenState extends State<quizeProfScreen> {
         ],
       ),
     );
-  }
-
-  void checkanswer(String k) {
-    if (k == widget.correctanswer[j]) {
-      setState(() {
-        grade += 1;
-        print(("true : ${grade}"));
-        j++;
-        print("j in true $j");
-      });
-    } else
-      setState(() {
-
-        j++;
-        print("j in false $j");
-      });
   }
 }

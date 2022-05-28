@@ -1,3 +1,4 @@
+import 'package:e_exam_app/pages/Admin/homeAdmin_Screen.dart';
 import 'package:e_exam_app/pages/professor/home_Screen_Professor.dart';
 import 'package:e_exam_app/pages/student/home_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -211,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
                 Route<dynamic> route) => false);
             print("token" + token + response.body + " email " + email);
           }
-          else
+          else if(role =="professor")
             {
               Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
                   builder: (BuildContext context) =>
@@ -219,6 +220,15 @@ class _LoginPageState extends State<LoginPage> {
                           token: token, name: name, email: email)), (
                   Route<dynamic> route) => false);
             }
+          else
+            {
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      homeScreenAdmin(
+                          token: token, name: name, email: email)), (
+                  Route<dynamic> route) => false);
+            }
+
         }
         );
       }

@@ -37,7 +37,7 @@ class _homeScreenStudentState extends State<homeScreenStudent> {
 
   List<String> LSubjectName = [];
   List<String> LSubjectId = [];
-  
+
   List <String> examName = [];
   List <String> SubjectName = [];
   List <int> yourScore = [];
@@ -58,9 +58,9 @@ class _homeScreenStudentState extends State<homeScreenStudent> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: <Color>[
-                Theme.of(context).primaryColor,
-                Theme.of(context).accentColor,
-              ])),
+                    Theme.of(context).primaryColor,
+                    Theme.of(context).accentColor,
+                  ])),
         ),
       ),
       body: GridView(
@@ -126,20 +126,20 @@ class _homeScreenStudentState extends State<homeScreenStudent> {
           ),
         ],
       ),
-      drawer: Drawer(
+      drawer:Drawer(
         child: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   stops: [
-                0.0,
-                1.0
-              ],
+                    0.0,
+                    1.0
+                  ],
                   colors: [
-                Theme.of(context).primaryColor.withOpacity(0.2),
-                Theme.of(context).accentColor.withOpacity(0.5),
-              ])),
+                    Theme.of(context).primaryColor.withOpacity(0.2),
+                    Theme.of(context).accentColor.withOpacity(0.5),
+                  ])),
           child: ListView(
             children: [
               DrawerHeader(
@@ -158,7 +158,7 @@ class _homeScreenStudentState extends State<homeScreenStudent> {
                 child: Container(
                   alignment: Alignment.bottomLeft,
                   child: Text(
-                    widget.email,
+                    widget.name,
                     style: TextStyle(
                         fontSize: 25,
                         color: Colors.white,
@@ -168,12 +168,12 @@ class _homeScreenStudentState extends State<homeScreenStudent> {
               ),
               ListTile(
                 leading: Icon(
-                  Icons.screen_lock_landscape_rounded,
+                  Icons.book,
                   size: _drawerIconSize,
                   color: Theme.of(context).accentColor,
                 ),
                 title: Text(
-                  'Splash Screen',
+                  'Subjecs',
                   style: TextStyle(
                       fontSize: 17, color: Theme.of(context).accentColor),
                 ),
@@ -182,15 +182,15 @@ class _homeScreenStudentState extends State<homeScreenStudent> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              SplashScreen(title: "Splash Screen")));
+                              Subjects(widget.token)));
                 },
               ),
               ListTile(
-                leading: Icon(Icons.login_rounded,
+                leading: Icon(Icons.grading,
                     size: _drawerIconSize,
                     color: Theme.of(context).accentColor),
                 title: Text(
-                  'Login Page',
+                  'Degree for Students',
                   style: TextStyle(
                       fontSize: _drawerFontSize,
                       color: Theme.of(context).accentColor),
@@ -198,28 +198,7 @@ class _homeScreenStudentState extends State<homeScreenStudent> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-                },
-              ),
-              Divider(
-                color: Theme.of(context).primaryColor,
-                height: 1,
-              ),
-              ListTile(
-                leading: Icon(Icons.person_add_alt_1,
-                    size: _drawerIconSize,
-                    color: Theme.of(context).accentColor),
-                title: Text(
-                  'Registration Page',
-                  style: TextStyle(
-                      fontSize: _drawerFontSize,
-                      color: Theme.of(context).accentColor),
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => RegistrationPage()),
+                    MaterialPageRoute(builder: (context) => Subjects(widget.token)),
                   );
                 },
               ),
@@ -288,7 +267,11 @@ class _homeScreenStudentState extends State<homeScreenStudent> {
                       color: Theme.of(context).accentColor),
                 ),
                 onTap: () {
-                  SystemNavigator.pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => LoginPage()),
+                  );
                 },
               ),
             ],
@@ -373,7 +356,7 @@ class _homeScreenStudentState extends State<homeScreenStudent> {
         SubjectName.add(jsonData["data"][i]["exam"]["subjectName"]);
         yourScore.add(jsonData["data"][i]["yourScore"]);
       }
-      
+
 
     } else {
       print(response.body);

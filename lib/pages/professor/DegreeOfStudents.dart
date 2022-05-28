@@ -6,34 +6,18 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
-class cardExamsProf extends StatefulWidget {
-  final List<String> idExam;
+class DrgreeOfStudents extends StatefulWidget {
+  final List<String> name ;
+  final List<int> Score ;
 
-  final List<String> nameOfExam;
-  final List<int> timer;
+  const DrgreeOfStudents({ required this.name,required  this.Score}) ;
 
-  final List<int> Score;
-  final String token;
-
-  cardExamsProf({required this.idExam,
-    required this.nameOfExam,
-    required this.timer,
-    required this.Score,
-    required this.token});
 
   @override
-  State<cardExamsProf> createState() => _cardExamsProfState();
+  State<DrgreeOfStudents> createState() => _DrgreeOfStudentsState();
 }
 
-class _cardExamsProfState extends State<cardExamsProf> {
-  bool _isLoading = false;
-
-  List<String> _Questions = [];
-  List<String> _answer1 = [];
-  List<String> _answer2 = [];
-  List<String> _answer3 = [];
-  List<String> _answer4 = [];
-  List<String> _correctanswer = [];
+class _DrgreeOfStudentsState extends State<DrgreeOfStudents> {
 
   @override
   Widget build(BuildContext context) {
@@ -64,10 +48,8 @@ class _cardExamsProfState extends State<cardExamsProf> {
             onPressed: (){
               Navigator.pop(context);
               setState(() {
-                widget.Score.clear();
-                widget.timer.clear();
-                widget.nameOfExam.clear();
-                widget.idExam.clear();
+               widget.Score.clear();
+               widget.name.clear();
               });
             },
           ) ,
@@ -81,7 +63,7 @@ class _cardExamsProfState extends State<cardExamsProf> {
               mainAxisSpacing: 15,
             ),
             children: [
-              for (int i = 0; i < widget.idExam.length; i++)
+              for (int i = 0; i < widget.name.length; i++)
                 InkWell(
                   child: Container(
                     padding: EdgeInsets.all(25),
@@ -106,7 +88,7 @@ class _cardExamsProfState extends State<cardExamsProf> {
                       title: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Text(
-                          widget.nameOfExam[i],
+                          ("Name : ${widget.name[i]}"),
                           style: TextStyle(
                               fontSize: 23,
                               fontWeight: FontWeight.bold,
@@ -117,84 +99,18 @@ class _cardExamsProfState extends State<cardExamsProf> {
                       subtitle: Padding(
                         padding: const EdgeInsets.only(left: 2),
                         child: Text(
-                          "Time : ${widget.timer[i]}  Score:${widget.Score[i]}",
+                          "Score : ${widget.Score[i]} ",
                           style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
+                            fontSize: 15,
+                            color: Colors.green,
                           ),
-                        ),
-                      ),
-                      trailing: IconButton(
-                        onPressed: () {
-                          Quize_api(widget.idExam[i], widget.token);
-                          setState(() {
-
-                          });
-                        },
-                        icon: Icon(
-                          Icons.arrow_forward_ios,
-                          size: 50,
-                          color: Colors.white,
                         ),
                       ),
                     ),
                   ),
-                  onTap: (){ Quize_api(widget.idExam[i], widget.token);},
+                  onTap: (){ },
                 ),
             ]));
   }
 
-  Quize_api(String id, String token) async {
-    var jsonData = null;
-
-    Map<String, String> queryParams = {
-      'subject': id,
-    };
-    Map<String, String> header = {
-      HttpHeaders.authorizationHeader: "Bearer $token",
-      HttpHeaders.contentTypeHeader: "application/json"
-    };
-    String url = "https://app-e-exam.herokuapp.com/getSpacificQuestion";
-    var uri = Uri(
-        scheme: 'https',
-        host: 'app-e-exam.herokuapp.com',
-        path: 'getSpacificQuestion/$id',
-        queryParameters: queryParams);
-    var response = await http.get(uri, headers: header);
-    jsonData = json.decode(response.body);
-    final data = jsonData;
-    int n = data.length;
-    if (response.statusCode == 200) {
-      setState(() {
-        _isLoading = false;
-        for (int i = 0; i < data.length; i++) {
-          _Questions.add(jsonData[i]["question"]);
-          _answer1.add(jsonData[i]["answer1"]);
-          _answer2.add(jsonData[i]["answer2"]);
-          _answer3.add(jsonData[i]["answer3"]);
-          _answer4.add(jsonData[i]["answer4"]);
-          _correctanswer.add(jsonData[i]["correctAnswer"]);
-        }
-
-
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => quizeProfScreen(
-              Questions: _Questions,
-              answer1: _answer1,
-              answer2: _answer2,
-              answer3: _answer3,
-              answer4: _answer4,
-              correctanswer: _correctanswer,
-              idExam: id,
-              token: widget.token,)
-            )
-        );
-      });
-      print(_Questions);
-      print(jsonData);
-    } else {
-      print(jsonData);
-    }
-  }
 }

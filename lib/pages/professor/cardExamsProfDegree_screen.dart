@@ -6,7 +6,9 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 
-class cardExamsProf extends StatefulWidget {
+import 'DegreeOfStudents.dart';
+
+class cardExamsProf1 extends StatefulWidget {
   final List<String> idExam;
 
   final List<String> nameOfExam;
@@ -15,17 +17,17 @@ class cardExamsProf extends StatefulWidget {
   final List<int> Score;
   final String token;
 
-  cardExamsProf({required this.idExam,
+  cardExamsProf1({required this.idExam,
     required this.nameOfExam,
     required this.timer,
     required this.Score,
     required this.token});
 
   @override
-  State<cardExamsProf> createState() => _cardExamsProfState();
+  State<cardExamsProf1> createState() => _cardExamsProf1State();
 }
 
-class _cardExamsProfState extends State<cardExamsProf> {
+class _cardExamsProf1State extends State<cardExamsProf1> {
   bool _isLoading = false;
 
   List<String> _Questions = [];
@@ -34,6 +36,9 @@ class _cardExamsProfState extends State<cardExamsProf> {
   List<String> _answer3 = [];
   List<String> _answer4 = [];
   List<String> _correctanswer = [];
+
+  List<String> name = [];
+  List<int> Score = [];
 
   @override
   Widget build(BuildContext context) {
@@ -64,10 +69,10 @@ class _cardExamsProfState extends State<cardExamsProf> {
             onPressed: (){
               Navigator.pop(context);
               setState(() {
-                widget.Score.clear();
-                widget.timer.clear();
-                widget.nameOfExam.clear();
-                widget.idExam.clear();
+              widget.idExam.clear();
+              widget.nameOfExam.clear();
+              widget.timer.clear();
+              widget.Score.clear();
               });
             },
           ) ,
@@ -154,45 +159,34 @@ class _cardExamsProfState extends State<cardExamsProf> {
       HttpHeaders.authorizationHeader: "Bearer $token",
       HttpHeaders.contentTypeHeader: "application/json"
     };
-    String url = "https://app-e-exam.herokuapp.com/getSpacificQuestion";
+    String url = "https://app-e-exam.herokuapp.com/studentGrads";
     var uri = Uri(
         scheme: 'https',
         host: 'app-e-exam.herokuapp.com',
-        path: 'getSpacificQuestion/$id',
+        path: 'studentGrads/$id',
         queryParameters: queryParams);
     var response = await http.get(uri, headers: header);
     jsonData = json.decode(response.body);
     final data = jsonData;
     int n = data.length;
+
+    for(int i = 0; i < n ; i++) {
+      name.add(jsonData["data"][i]["student"]["fristName"]);
+      Score.add(jsonData["data"][i]["yourScore"]);
+    }
     if (response.statusCode == 200) {
       setState(() {
         _isLoading = false;
-        for (int i = 0; i < data.length; i++) {
-          _Questions.add(jsonData[i]["question"]);
-          _answer1.add(jsonData[i]["answer1"]);
-          _answer2.add(jsonData[i]["answer2"]);
-          _answer3.add(jsonData[i]["answer3"]);
-          _answer4.add(jsonData[i]["answer4"]);
-          _correctanswer.add(jsonData[i]["correctAnswer"]);
-        }
-
-
+        print(jsonData);
         Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => quizeProfScreen(
-              Questions: _Questions,
-              answer1: _answer1,
-              answer2: _answer2,
-              answer3: _answer3,
-              answer4: _answer4,
-              correctanswer: _correctanswer,
-              idExam: id,
-              token: widget.token,)
+            MaterialPageRoute(builder: (context) => DrgreeOfStudents(name: name, Score: Score,)
             )
         );
+
+
       });
-      print(_Questions);
-      print(jsonData);
+      print("Hello $jsonData");
     } else {
       print(jsonData);
     }

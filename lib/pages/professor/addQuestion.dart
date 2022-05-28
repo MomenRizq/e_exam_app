@@ -149,9 +149,8 @@ class _addQuestionState extends State<addQuestion> {
       final data = jsonData["data"];
       setState(() {
         _isLoading = false;
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) =>Questions_Controller(idOfExam , widget.token)),
-                (Route<dynamic> route) => false);
+
+        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>Questions_Controller(idOfExam , widget.token) ));
       });
       print(jsonData);
     } else {

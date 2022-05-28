@@ -12,18 +12,20 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-class subjectsProfScreen extends StatefulWidget {
+import 'cardExamsProfDegree_screen.dart';
+
+class subjectsProf1Screen extends StatefulWidget {
   final List SubjectsName;
   final List SubjectsId;
   final token;
 
-  const subjectsProfScreen(this.SubjectsName, this.SubjectsId, this.token);
+  const subjectsProf1Screen(this.SubjectsName, this.SubjectsId, this.token);
 
   @override
-  State<subjectsProfScreen> createState() => _subjectsProfScreenState();
+  State<subjectsProf1Screen> createState() => _subjectsProf1ScreenState();
 }
 
-class _subjectsProfScreenState extends State<subjectsProfScreen> {
+class _subjectsProf1ScreenState extends State<subjectsProf1Screen> {
   String? id;
 
   bool _isLoading = false;
@@ -41,17 +43,17 @@ class _subjectsProfScreenState extends State<subjectsProfScreen> {
           "Subject",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
+        elevation: 0.5,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: (){
             Navigator.pop(context);
             setState(() {
-             widget.SubjectsId.clear();
-             widget.SubjectsName.clear();
+              widget.SubjectsName.clear();
+              widget.SubjectsId.clear();
             });
           },
         ) ,
-        elevation: 0.5,
         iconTheme: IconThemeData(color: Colors.white),
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -67,7 +69,7 @@ class _subjectsProfScreenState extends State<subjectsProfScreen> {
       body: GridView(
           padding: EdgeInsets.all(25.0),
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 400,
+            maxCrossAxisExtent: 300,
             childAspectRatio: 3 / 0.95,
             crossAxisSpacing: 13,
             mainAxisSpacing: 13,
@@ -104,24 +106,9 @@ class _subjectsProfScreenState extends State<subjectsProfScreen> {
                 },
               )
           ]),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showAddBottomSheet(widget.SubjectsName , widget.SubjectsId , widget.token);
-        },
-        child: Icon(Icons.add),
-        shape: StadiumBorder(side: BorderSide(color: Colors.white, width: 4)),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
-  void showAddBottomSheet(List SubjectsName , List SubjectId , token) {
-    showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return addQuestion(SubjectsId: SubjectId , SubjectsName:SubjectsName , token: token,);
-        });
-  }
   ShowEx_api(String id, String token) async {
     var jsonData = null;
 
@@ -151,7 +138,7 @@ class _subjectsProfScreenState extends State<subjectsProfScreen> {
       }
       setState(() {
         _isLoading = false;
-        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>cardExamsProf(idExam: idExam, nameOfExam: nameOfExam, timer: timer, Score: Score, token: widget.token,)), );
+        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>cardExamsProf1(idExam: idExam, nameOfExam: nameOfExam, timer: timer, Score: Score, token: widget.token,)), );
       });
       print(jsonData);
     } else {
